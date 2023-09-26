@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <cstring>
 
 using namespace std;
 typedef struct
@@ -20,193 +21,27 @@ typedef struct
     string destino;
     int assentos[40];
 } Viagem;
-int qtdViagemDia(vector<Viagem> &viagens, string data)
-{
-    int qtd = 0;
-    for (int i = 0; i < viagens.size(); i++)
-    {
-        if (viagens[i].data == data)
-        {
-            qtd++;
-        }
-    }
-    return qtd;
-}
 
-void cadastrarViagem(vector<Viagem> &viagens)
-{
-    Viagem viagem;
-    int opcao;
-    int qtdDia;
-    viagem.codigo = viagens.size() + 1; // codigo da viagem é o tamanho do vetor +1, fazendo com meu codigo seja unico(para esse caso que não tem exclusao)
-    do
-    {
-        cout << "Digite a data da viagem: " << endl;
-        cin >> viagem.data;
-        qtdDia = qtdViagemDia(viagens, viagem.data);
-        if (qtdDia >= 10)
-        {
-            cout << "Não há frota, data lotada" << endl;
-        }
-    } while (qtdDia >= 10);
-    cout << "Digite o horario da viagem: " << endl;
-    cin >> viagem.horario;
-    cout << "Qual sera a origem? 1-Rio de Janeiro 2-Sao Paulo" << endl;
-    cin >> opcao;
-    switch (opcao)
-    {
-    case 1:
-        viagem.origem = "Rio de Janeiro";
-        viagem.destino = "Sao Paulo";
-        break;
-    case 2:
-        viagem.origem = "Sao Paulo";
-        viagem.destino = "Rio de Janeiro";
-        break;
-    }
-    viagem.assentos[40] = {0}; // inicializa tudo com 0, desocupado
-    viagens.push_back(viagem);
-}
-void listarViagem(vector<Viagem> &viagens)
-{
-    // cout << "Viagens disponiveis: " << endl;
-    cout << "\tCodigo\tData\tHorario\tOrigem\tDestino\t" << viagens.size() << endl;
-    for (int i = 0; i < viagens.size(); i++)
-    {
-        cout << viagens[i].codigo << "\t";
-        cout << viagens[i].data << "\t";
-        cout << viagens[i].horario << "\t";
-        cout << viagens[i].origem << "\t";
-        cout << viagens[i].destino << endl;
-    }
-}
-int buscarViagem(vector<Viagem> &viagens, int codigo)
-{
-    for (int i = 0; i < viagens.size(); i++)
-    {
-        if (viagens[i].codigo == codigo)
-        {
-            return i;
-        }
-    }
-    return -1;
-}
+// Viagem
+int qtdViagemDia(vector<Viagem> &, string);
+void cadastrarViagem(vector<Viagem> &);
+void listarViagem(vector<Viagem> &);
+int buscarViagem(vector<Viagem> &, int);
 
-void venderPassagem(vector<Viagem> &viagens, vector<Passagem> &passagens)
-{
-    int codigo;
-    Passagem passagem;
-    int poltrona;
-    cout << "Escolha o codigo de uma das viagens" << endl;
-    listarViagem(viagens);
-    cin >> codigo;
-    int posicao = buscarViagem(viagens, codigo);
-    if (posicao == -1)
-    {
-        cout << "Viagem nao encontrada" << endl;
-        return;
-    }
+// Passagem
+void venderPassagem(vector<Viagem> &, vector<Passagem> &);
+int valorTotalViagem(vector<Viagem> &, int);
+int valorTotalViagemMes(vector<Viagem> &, int);
+Passagem encontraPassagem(vector<Passagem> &, int, int);
 
-    do
-    {
-        cout << "Digite o numero da poltrona: " << endl;
-        cin >> poltrona;
-        if (viagens[posicao].assentos[poltrona] == 1)
-        {
-            cout << "Poltrona ocupada" << endl;
-            poltrona = 0;
-        }
-        else
-        {
-            viagens[posicao].assentos[poltrona] = 1;
-        }
+// Validacoes
+bool validaData(string);
+bool validaCPF(char cpf[12]);
 
-    } while (poltrona < 1 || poltrona > 40);
-    cout << "Digite o CPF do cliente: " << endl;
-    cin >> passagem.cpf;
-    cout << "Digite o nome do cliente: " << endl;
-    cin >> passagem.nome;
-    cout << "Digite a idade do cliente: " << endl;
-    cin >> passagem.idade;
-    passagem.poltrona = poltrona;
-    passagem.codigo = codigo;
-    passagens.push_back(passagem);
-    cout << "Passagem vendida com sucesso" << endl;
-}
-int valorTotalViagem(vector<Viagem> &viagens, int codigo)
-{
-    int posicao = buscarViagem(viagens, codigo);
-    int valor = 0;
-    if (posicao == -1)
-    {
-        return -1;
-    }
-    else
-    {
-        for (int i = 0; i < 40; i++)
-        {
-            if (viagens[posicao].assentos[i] == 1)
-            {
-                valor += 80;
-            }
-        }
-    }
-    return valor;
-}
-int valorTotalViagemMes(vector<Viagem> &viagens, int mes)
-{
-    string mesV;
-    int valor = 0;
-    for (int i = 0; i < viagens.size(); i++)
-    {
-        mesV = viagens[i].data.substr(3, 2);
-        if (stoi(mesV) == mes)
-        {
-            valor += valorTotalViagem(viagens, viagens[i].codigo);
-        }
-    }
-    return valor;
-}
-Passagem encontraPassagem(vector<Passagem> &passagens, int codigo, int poltrona)
-{
-    for (int i = 0; i < passagens.size(); i++)
-    {
+// Relatorios
+string horarioMaisRentavel(vector<Viagem> &);
+float mediaIdade(vector<Passagem> &);
 
-        if (passagens[i].codigo == codigo && passagens[i].poltrona == poltrona)
-        {
-            return passagens[i];
-        }
-    }
-
-    return Passagem();
-}
-
-string horarioMaisRentavel(vector<Viagem> &viagens)
-{
-    int maior = 0, posicao = 0;
-    for (int i = 0; i < viagens.size(); i++)
-    {
-        if (valorTotalViagem(viagens, viagens[i].codigo) > maior)
-        {
-            maior = valorTotalViagem(viagens, viagens[i].codigo);
-            posicao = i;
-        }
-    }
-    return viagens[posicao].horario;
-}
-
-float mediaIdade(vector<Passagem> &passagens)
-{
-    float media = 0;
-    if(passagens.size() == 0){
-        return 0;
-    }
-    for (int i = 0; i < passagens.size(); i++)
-    {
-        media += passagens[i].idade;
-    }
-    return media / passagens.size();
-}
 int main(void)
 {
     vector<Passagem> passagens;
@@ -290,6 +125,193 @@ int main(void)
 
     } while (resposta != 9);
     return 0;
+}
+
+// Passagem
+void venderPassagem(vector<Viagem> &viagens, vector<Passagem> &passagens)
+{
+    int codigo;
+    Passagem passagem;
+    int poltrona;
+    int resposta;
+    cout << "Escolha o codigo de uma das viagens" << endl;
+    listarViagem(viagens);
+    cin >> codigo;
+    int posicao = buscarViagem(viagens, codigo);
+    if (posicao == -1)
+    {
+        cout << "Viagem nao encontrada" << endl;
+        return;
+    }
+
+    do
+    {
+        cout << "Digite o numero da poltrona: " << endl;
+        cin >> poltrona;
+        if (viagens[posicao].assentos[poltrona] == 1)
+        {
+            cout << "Poltrona ocupada" << endl;
+            poltrona = 0;
+        }
+        else
+        {
+            viagens[posicao].assentos[poltrona] = 1;
+        }
+
+    } while (poltrona < 1 || poltrona > 40);
+    do
+    {
+
+        cout << "Digite o CPF do cliente (apenas numeros): " << endl;
+        cin >> passagem.cpf;
+        resposta = validaCPF(passagem.cpf);
+        if (!resposta)
+        {
+            cout << "CPF invalido" << endl;
+        }
+    } while (resposta);
+    cout << "Digite o nome do cliente: " << endl;
+    cin >> passagem.nome;
+    cout << "Digite a idade do cliente: " << endl;
+    cin >> passagem.idade;
+    passagem.poltrona = poltrona;
+    passagem.codigo = codigo;
+    passagens.push_back(passagem);
+    cout << "Passagem vendida com sucesso" << endl;
+}
+int valorTotalViagem(vector<Viagem> &viagens, int codigo)
+{
+    int posicao = buscarViagem(viagens, codigo);
+    int valor = 0;
+    if (posicao == -1)
+    {
+        return -1;
+    }
+    else
+    {
+        for (int i = 0; i < 40; i++)
+        {
+            if (viagens[posicao].assentos[i] == 1)
+            {
+                valor += 80;
+            }
+        }
+    }
+    return valor;
+}
+int valorTotalViagemMes(vector<Viagem> &viagens, int mes)
+{
+    string mesV;
+    int valor = 0;
+    for (int i = 0; i < viagens.size(); i++)
+    {
+        mesV = viagens[i].data.substr(3, 2);
+        if (stoi(mesV) == mes)
+        {
+            valor += valorTotalViagem(viagens, viagens[i].codigo);
+        }
+    }
+    return valor;
+}
+Passagem encontraPassagem(vector<Passagem> &passagens, int codigo, int poltrona)
+{
+    for (int i = 0; i < passagens.size(); i++)
+    {
+
+        if (passagens[i].codigo == codigo && passagens[i].poltrona == poltrona)
+        {
+            return passagens[i];
+        }
+    }
+
+    return Passagem();
+}
+
+// Viagem
+int qtdViagemDia(vector<Viagem> &viagens, string data)
+{
+    int qtd = 0;
+    for (int i = 0; i < viagens.size(); i++)
+    {
+        if (viagens[i].data == data)
+        {
+            qtd++;
+        }
+    }
+    return qtd;
+}
+void cadastrarViagem(vector<Viagem> &viagens)
+{
+    Viagem viagem;
+    int opcao;
+    int qtdDia;
+    bool erro = false;
+    viagem.codigo = viagens.size() + 1; // codigo da viagem é o tamanho do vetor +1, fazendo com meu codigo seja unico(para esse caso que não tem exclusao)
+    do
+    {
+        do
+        {
+            cout << "Digite a data da viagem: " << endl;
+            cin >> viagem.data;
+            if (!validaData(viagem.data))
+            {
+                cout << "Data invalida" << endl;
+                erro = true;
+            }
+            else
+            {
+                erro = false;
+            }
+        } while (erro);
+        qtdDia = qtdViagemDia(viagens, viagem.data);
+        if (qtdDia >= 10)
+        {
+            cout << "Não há frota, data lotada" << endl;
+        }
+    } while (qtdDia >= 10);
+    cout << "Digite o horario da viagem: " << endl;
+    cin >> viagem.horario;
+    cout << "Qual sera a origem? 1-Rio de Janeiro 2-Sao Paulo" << endl;
+    cin >> opcao;
+    switch (opcao)
+    {
+    case 1:
+        viagem.origem = "Rio de Janeiro";
+        viagem.destino = "Sao Paulo";
+        break;
+    case 2:
+        viagem.origem = "Sao Paulo";
+        viagem.destino = "Rio de Janeiro";
+        break;
+    }
+    viagem.assentos[40] = {0}; // inicializa tudo com 0, desocupado
+    viagens.push_back(viagem);
+}
+void listarViagem(vector<Viagem> &viagens)
+{
+    // cout << "Viagens disponiveis: " << endl;
+    cout << "\tCodigo\tData\tHorario\tOrigem\tDestino\t" << viagens.size() << endl;
+    for (int i = 0; i < viagens.size(); i++)
+    {
+        cout << viagens[i].codigo << "\t";
+        cout << viagens[i].data << "\t";
+        cout << viagens[i].horario << "\t";
+        cout << viagens[i].origem << "\t";
+        cout << viagens[i].destino << endl;
+    }
+}
+int buscarViagem(vector<Viagem> &viagens, int codigo)
+{
+    for (int i = 0; i < viagens.size(); i++)
+    {
+        if (viagens[i].codigo == codigo)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
 // Validacoes
 bool validaData(string data)
 {
@@ -464,3 +486,30 @@ bool validaCPF(char cpf[12])
     return true;
 }
 
+// Relatorios
+string horarioMaisRentavel(vector<Viagem> &viagens)
+{
+    int maior = 0, posicao = 0;
+    for (int i = 0; i < viagens.size(); i++)
+    {
+        if (valorTotalViagem(viagens, viagens[i].codigo) > maior)
+        {
+            maior = valorTotalViagem(viagens, viagens[i].codigo);
+            posicao = i;
+        }
+    }
+    return viagens[posicao].horario;
+}
+float mediaIdade(vector<Passagem> &passagens)
+{
+    float media = 0;
+    if (passagens.size() == 0)
+    {
+        return 0;
+    }
+    for (int i = 0; i < passagens.size(); i++)
+    {
+        media += passagens[i].idade;
+    }
+    return media / passagens.size();
+}
