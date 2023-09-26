@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cstring>
+#include <iomanip>
 using namespace std;
 
 typedef struct 
@@ -23,7 +25,8 @@ int main(void)
     Empregado empregados[50];
     int tamanho = 0;
     int opcao;
-    do{
+    cout<<fixed;
+    cout.precision(2);
         cout << "1-Cadastrar empregado" << endl;
         cout << "2-Reajustar salario" << endl;
         cout << "3-Sair" << endl;
