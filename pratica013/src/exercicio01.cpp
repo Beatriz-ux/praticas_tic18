@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <cstring>
-
+#include <iomanip>
 using namespace std;
 typedef struct
 {
@@ -289,15 +289,19 @@ void cadastrarViagem(vector<Viagem> &viagens)
 }
 void listarViagem(vector<Viagem> &viagens)
 {
-    // cout << "Viagens disponiveis: " << endl;
-    cout << "\tCodigo\tData\tHorario\tOrigem\tDestino\t" << endl;
+    cout << "Viagens disponiveis: " << endl;
+    cout << setw(10) << left << "Codigo"
+         << setw(12) << left << "Data"
+         << setw(10) << left << "Horario"
+         << setw(18) << left << "Origem"
+         << setw(18) << left << "Destino" << endl;
     for (int i = 0; i < viagens.size(); i++)
     {
-        cout << viagens[i].codigo << "\t";
-        cout << viagens[i].data << "\t";
-        cout << viagens[i].horario << "\t";
-        cout << viagens[i].origem << "\t";
-        cout << viagens[i].destino << endl;
+        cout << setw(10) << left << viagens[i].codigo
+             << setw(12) << left << viagens[i].data
+             << setw(10) << left << viagens[i].horario
+             << setw(18) << left << viagens[i].origem
+             << setw(18) << left << viagens[i].destino << endl;
     }
 }
 int buscarViagem(vector<Viagem> &viagens, int codigo)
