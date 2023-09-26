@@ -67,6 +67,10 @@ void reajustar_dez_porcento(Empregado *empregados, int tamanho)
 void cadastrarEmpregado(Empregado *empregados, int *tamanho)
 {
     bool valido = false;
+    if(*tamanho == 50){
+        cout << "Numero maximo de empregados atingido" << endl;
+        return;
+    }
     cout << "Digite o nome do empregado: " << endl;
     cin >> empregados[*tamanho].nome;
     cout << "Digite o sobrenome do empregado: " << endl;
