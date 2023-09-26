@@ -3,44 +3,48 @@
 #include <iomanip>
 using namespace std;
 
-typedef struct 
+typedef struct
 {
     string nome;
     string sobrenome;
     char dataNascimento[11];
-    char rg[10];
+    char rg[11];
     char anoAdmissao[5];
     float salario;
-}Empregado;
+} Empregado;
 
-void reajustar_dez_porcento(Empregado*, int);
-void cadastrarEmpregado(Empregado*, int*);
-void listarEmpregados(Empregado*, int);
+void reajustar_dez_porcento(Empregado *, int);
+void cadastrarEmpregado(Empregado *, int *);
+void listarEmpregados(Empregado *, int);
 
 // Validacoes
 bool validaData(string);
 bool validaRG(char cpf[12]);
 bool validaRGEmpregado(char rg[11], Empregado *empregados, int tamanho);
 int main(void)
+{
     Empregado empregados[50];
     int tamanho = 0;
     int opcao;
     cout<<fixed;
     cout.precision(2);
+    do
+    {
         cout << "1-Cadastrar empregado" << endl;
         cout << "2-Reajustar salario" << endl;
-        cout << "3-Sair" << endl;
+        cout << "3-Listar empregados" << endl;
+        cout << "4-Sair" << endl;
         cin >> opcao;
         switch (opcao)
         {
         case 1:
-            cadastrarEmpregado(empregados,&tamanho);
+            cadastrarEmpregado(empregados, &tamanho);
             break;
         case 2:
-            reajustar_dez_porcento(empregados,tamanho);
+            reajustar_dez_porcento(empregados, tamanho);
             break;
         case 3:
-            listarEmpregados(empregados,tamanho);
+            listarEmpregados(empregados, tamanho);
             break;
         case 4:
             cout << "Saindo..." << endl;
@@ -49,26 +53,28 @@ int main(void)
             cout << "Opcao invalida" << endl;
             break;
         }
-    }while(opcao != 4);
+    } while (opcao != 4);
     return 0;
-
 }
 
-
-void reajustar_dez_porcento(Empregado* empregados, int tamanho){
-    for(int i = 0; i < tamanho; i++){
+void reajustar_dez_porcento(Empregado *empregados, int tamanho)
+{
+    for (int i = 0; i < tamanho; i++)
+    {
         empregados[i].salario *= 1.1;
     }
 }
-void cadastrarEmpregado(Empregado* empregados,int* tamanho){
+void cadastrarEmpregado(Empregado *empregados, int *tamanho)
+{
+    bool valido = false;
     cout << "Digite o nome do empregado: " << endl;
     cin >> empregados[*tamanho].nome;
     cout << "Digite o sobrenome do empregado: " << endl;
     cin >> empregados[*tamanho].sobrenome;
     do
     {
-    cout << "Digite a data de nascimento do empregado: " << endl;
-    cin >> empregados[*tamanho].dataNascimento;
+        cout << "Digite a data de nascimento do empregado: " << endl;
+        cin >> empregados[*tamanho].dataNascimento;
         if (!validaData(empregados[*tamanho].dataNascimento))
         {
             cout << "Data invalida" << endl;
@@ -79,11 +85,12 @@ void cadastrarEmpregado(Empregado* empregados,int* tamanho){
             valido = false;
         }
     } while (valido);
+
     do
     {
 
-    cout << "Digite o RG do empregado: " << endl;
-    cin >> empregados[*tamanho].rg;
+        cout << "Digite o RG do empregado: " << endl;
+        cin >> empregados[*tamanho].rg;
         if (!validaRGEmpregado(empregados[*tamanho].rg, empregados, *tamanho))
         {
             cout << "RG invalido" << endl;
@@ -116,6 +123,7 @@ void listarEmpregados(Empregado *empregados, int tamanho)
              << setw(10) << left << empregados[i].salario << endl;
     }
 }
+
 // Validacoes
 bool validaData(string data)
 {
@@ -299,7 +307,7 @@ bool validaRGEmpregado(char rg[11], Empregado *empregados, int tamanho)
             if(strcmp(rg, empregados[i].rg) == 0){
                 return false;
             }
-}
+        }
     }
     return true;
 }
