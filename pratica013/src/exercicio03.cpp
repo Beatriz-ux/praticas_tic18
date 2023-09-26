@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <cstring>
+#include <iomanip>
 using namespace std;
 
 typedef struct
@@ -179,12 +180,17 @@ void cadastrarProduto(vector<Produto> &produtos)
 }
 void listarProdutos(vector<Produto> &produtos)
 {
+    cout << "Produtos cadastrados: " << endl;
+    cout << setw(15) << left << "Codigo";
+    cout << setw(25) << left << "Nome";
+    cout << setw(15) << left << "Preco" << endl;
     for (int i = 0; i < produtos.size(); i++)
     {
-        cout << "Codigo: " << produtos[i].codigo << endl;
-        cout << "Nome: " << produtos[i].nome << endl;
-        cout << "Preco: " << produtos[i].preco << endl;
+        cout << setw(15) << left << produtos[i].codigo;
+        cout << setw(22) << left << produtos[i].nome;
+        cout << setw(15) << left << produtos[i].preco << endl;
     }
+    cout << endl;
 }
 bool excluirProduto(vector<Produto> &produtos)
 {
