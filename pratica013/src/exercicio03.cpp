@@ -2,6 +2,7 @@
 #include <vector>
 #include <cstring>
 using namespace std;
+
 typedef struct
 {
     string codigo;
@@ -9,129 +10,19 @@ typedef struct
     float preco;
 } Produto;
 
-void toUpperCase(string &str)
-{
-    for (char &c : str)
-    {
-        c = toupper(c);
-    }
-}
+// Utils
+void toUpperCase(string &);
 
-bool qtdDigitos(string codigo, int qtd)
-{
-    if (codigo.length() != qtd)
-    {
-        cout << "Quantidade de digitos errada!" << endl;
-        return false;
-    }
-    else
-    {
-        for (char c : codigo)
-        {
-            if (!isdigit(c))
-            {
-                cout << "Codigo deve conter apenas numeros!" << endl;
-                return false;
-            }
-        }
-    }
+// Verificações
+bool qtdDigitos(string, int);
+bool verificaNome(vector<Produto> &, string);
+bool verificaCodigo(vector<Produto> &, string);
 
-    return true;
-}
-bool verificaNome(vector<Produto> &produtos, string nome)
-{
-    for (int i = 0; i < produtos.size(); i++)
-    {
-        if (produtos[i].nome == nome)
-        {
-            cout << "Nome ja cadastrado" << endl;
-            return false;
-        }
-    }
-    if (nome.length() > 20)
-    {
-        cout << "Quantidade de caractes errada!" << endl;
-        return false;
-    }
-    return true;
-}
-bool verificaCodigo(vector<Produto> &produtos, string codigo)
-{
-    for (int i = 0; i < produtos.size(); i++)
-    {
-        if (produtos[i].codigo == codigo)
-        {
-            cout << "Codigo ja cadastrado" << endl;
-            return false;
-        }
-    }
-    if (qtdDigitos(codigo, 13))
-    {
-        return true;
-    }
-    return false;
-}
-void cadastrarProduto(vector<Produto> &produtos)
-{
-    Produto produto;
-    string nome;
-    do
-    {
-
-        cout << "Digite o codigo do produto: " << endl;
-        cin >> produto.codigo;
-    } while (!verificaCodigo(produtos, produto.codigo));
-    cin.ignore();
-    do
-    {
-        cout << "Digite o nome do produto: " << endl;
-        getline(cin,nome);
-        toUpperCase(nome);
-        
-    } while (!verificaNome(produtos,nome));
-    produto.nome = nome;
-
-    cout << "Digite o preco do produto: " << endl;
-    cin >> produto.preco;
-    produtos.push_back(produto);
-}
-void listarProdutos(vector<Produto> &produtos)
-{
-    for (int i = 0; i < produtos.size(); i++)
-    {
-        cout << "Codigo: " << produtos[i].codigo << endl;
-        cout << "Nome: " << produtos[i].nome << endl;
-        cout << "Preco: " << produtos[i].preco << endl;
-    }
-}
-bool excluirProduto(vector<Produto> &produtos)
-{
-    string codigo;
-    cout << "Digite o codigo do produto que deseja excluir: " << endl;
-    cin >> codigo;
-    for (int i = 0; i < produtos.size(); i++)
-    {
-        if (produtos[i].codigo == codigo)
-        {
-            produtos.erase(produtos.begin() + i);
-            return true;
-        }
-    }
-    return false;
-}
-Produto consultarProduto(vector<Produto> &produtos, string codigo)
-{
-
-    for (int i = 0; i < produtos.size(); i++)
-    {
-        if (produtos[i].codigo == codigo)
-        {
-            return produtos[i];
-        }
-    }
-    Produto produto;
-    return produto;
-}
+// Produto
+void cadastrarProduto(vector<Produto> &);
+void listarProdutos(vector<Produto> &);
+bool excluirProduto(vector<Produto> &);
+Produto consultarProduto(vector<Produto> &, string);
 
 int main(void)
 {
@@ -192,4 +83,134 @@ int main(void)
 
     } while (opcao != 5);
     return 0;
+}
+
+// Utils
+void toUpperCase(string &str)
+{
+    for (char &c : str)
+    {
+        c = toupper(c);
+    }
+}
+
+// Verificações
+bool qtdDigitos(string codigo, int qtd)
+{
+    if (codigo.length() != qtd)
+    {
+        cout << "Quantidade de digitos errada!" << endl;
+        return false;
+    }
+    else
+    {
+        for (char c : codigo)
+        {
+            if (!isdigit(c))
+            {
+                cout << "Codigo deve conter apenas numeros!" << endl;
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+bool verificaNome(vector<Produto> &produtos, string nome)
+{
+    for (int i = 0; i < produtos.size(); i++)
+    {
+        if (produtos[i].nome == nome)
+        {
+            cout << "Nome ja cadastrado" << endl;
+            return false;
+        }
+    }
+    if (nome.length() > 20)
+    {
+        cout << "Quantidade de caractes errada!" << endl;
+        return false;
+    }
+    return true;
+}
+bool verificaCodigo(vector<Produto> &produtos, string codigo)
+{
+    for (int i = 0; i < produtos.size(); i++)
+    {
+        if (produtos[i].codigo == codigo)
+        {
+            cout << "Codigo ja cadastrado" << endl;
+            return false;
+        }
+    }
+    if (qtdDigitos(codigo, 13))
+    {
+        return true;
+    }
+    return false;
+}
+
+// Produto
+void cadastrarProduto(vector<Produto> &produtos)
+{
+    Produto produto;
+    string nome;
+    cout <<fixed;
+    do
+    {
+
+        cout << "Digite o codigo do produto: " << endl;
+        cin >> produto.codigo;
+    } while (!verificaCodigo(produtos, produto.codigo));
+    cin.ignore();
+    do
+    {
+        cout << "Digite o nome do produto: " << endl;
+        getline(cin, nome);
+        toUpperCase(nome);
+
+    } while (!verificaNome(produtos, nome));
+    produto.nome = nome;
+
+    cout << "Digite o preco do produto: " << endl;
+    cout.precision(2);
+    cin >> produto.preco;
+    produtos.push_back(produto);
+}
+void listarProdutos(vector<Produto> &produtos)
+{
+    for (int i = 0; i < produtos.size(); i++)
+    {
+        cout << "Codigo: " << produtos[i].codigo << endl;
+        cout << "Nome: " << produtos[i].nome << endl;
+        cout << "Preco: " << produtos[i].preco << endl;
+    }
+}
+bool excluirProduto(vector<Produto> &produtos)
+{
+    string codigo;
+    cout << "Digite o codigo do produto que deseja excluir: " << endl;
+    cin >> codigo;
+    for (int i = 0; i < produtos.size(); i++)
+    {
+        if (produtos[i].codigo == codigo)
+        {
+            produtos.erase(produtos.begin() + i);
+            return true;
+        }
+    }
+    return false;
+}
+Produto consultarProduto(vector<Produto> &produtos, string codigo)
+{
+
+    for (int i = 0; i < produtos.size(); i++)
+    {
+        if (produtos[i].codigo == codigo)
+        {
+            return produtos[i];
+        }
+    }
+    Produto produto;
+    return produto;
 }
