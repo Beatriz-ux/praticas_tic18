@@ -97,6 +97,22 @@ void cadastrarEmpregado(Empregado* empregados,int* tamanho){
     cin >> empregados[*tamanho].salario;
     *tamanho += 1;
 }
+void listarEmpregados(Empregado *empregados, int tamanho)
+{
+    cout << setw(30) << left << "Nome"
+         << setw(14) << left << "Data Nasc"
+         << setw(15) << left << "RG"
+         << setw(12) << left << "Admissao"
+         << setw(10) << left << "Salario" << endl;
+    for (int i = 0; i < tamanho; i++)
+    {
+        cout << setw(30) << left << empregados[i].nome + " " + empregados[i].sobrenome
+             << setw(14) << left << empregados[i].dataNascimento
+             << setw(15) << left << empregados[i].rg
+             << setw(12) << left << empregados[i].anoAdmissao
+             << setw(10) << left << empregados[i].salario << endl;
+    }
+}
 // Validacoes
 bool validaData(string data)
 {
