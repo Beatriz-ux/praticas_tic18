@@ -290,7 +290,7 @@ void cadastrarViagem(vector<Viagem> &viagens)
 void listarViagem(vector<Viagem> &viagens)
 {
     // cout << "Viagens disponiveis: " << endl;
-    cout << "\tCodigo\tData\tHorario\tOrigem\tDestino\t" << viagens.size() << endl;
+    cout << "\tCodigo\tData\tHorario\tOrigem\tDestino\t" << endl;
     for (int i = 0; i < viagens.size(); i++)
     {
         cout << viagens[i].codigo << "\t";
