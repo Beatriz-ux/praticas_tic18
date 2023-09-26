@@ -290,5 +290,177 @@ int main(void)
 
     } while (resposta != 9);
     return 0;
+// Validacoes
+bool validaData(string data)
+{
+    char temp[5], mesC[10];
+    int i = 0, j = 0, dia, mes, ano;
+    if (data.size() != 10)
+    {
+        return false;
+    }
+    else
+    {
+        while (data[i] != '/')
+        {
+            temp[i] = data[i];
+            i++;
+        }
+        dia = atoi(temp);
 
+        if (dia < 1 || dia > 31)
+        {
+            return false;
+        }
+        i++;
+        while (data[i] != '/')
+        {
+            temp[j++] = data[i];
+            i++;
+        }
+        i++;
+
+        j = 0;
+        mes = atoi(temp);
+
+        if (mes < 1 || mes > 12)
+        {
+            return false;
+        }
+        j = 0;
+        while (data[i] != '\0')
+        {
+            temp[j++] = data[i];
+            i++;
+        }
+        ano = atoi(temp);
+
+        if (ano == 0)
+        {
+            return false;
+        }
+
+        switch (mes)
+        {
+        case 1:
+            if (dia > 31)
+            {
+                return false;
+            }
+            strcpy(mesC, "Janeiro");
+            break;
+        case 2:
+            if (!(
+                    (ano % 400 == 0) ||
+                    ((ano % 4 == 0) && (ano % 100 != 0))) &&
+                (dia == 29))
+            {
+                return false;
+            }
+            if (dia > 29)
+            {
+                return false;
+            }
+            strcpy(mesC, "Fevereiro");
+
+            break;
+        case 3:
+            if (dia > 31)
+            {
+                return false;
+            }
+            strcpy(mesC, "Marco");
+            break;
+        case 4:
+            if (dia > 30)
+            {
+                return false;
+            }
+            strcpy(mesC, "Abril");
+            break;
+        case 5:
+            if (dia > 31)
+            {
+                return false;
+            }
+            strcpy(mesC, "Maio");
+            break;
+        case 6:
+            if (dia > 30)
+            {
+                return false;
+            }
+            strcpy(mesC, "Junho");
+            break;
+        case 7:
+            if (dia > 31)
+            {
+                return false;
+            }
+            strcpy(mesC, "Julho");
+            break;
+        case 8:
+            if (dia > 31)
+            {
+                return false;
+            }
+            strcpy(mesC, "Agosto");
+            break;
+        case 9:
+            if (dia > 30)
+            {
+                return false;
+            }
+            strcpy(mesC, "Setembro");
+            break;
+        case 10:
+            if (dia > 31)
+            {
+                return false;
+            }
+            strcpy(mesC, "Outubro");
+            break;
+        case 11:
+            if (dia > 30)
+            {
+                return false;
+            }
+            strcpy(mesC, "Novembro");
+            break;
+        case 12:
+            if (dia > 31)
+            {
+                return false;
+            }
+            strcpy(mesC, "Dezembro");
+            break;
+
+        default:
+            break;
+        }
+        return true;
+    }
 }
+bool validaCPF(char cpf[12])
+{
+    // Verifica se o CPF possui 11 dígitos
+    if (strlen(cpf) != 11)
+        return false;
+
+    // Verifica se todos os caracteres são dígitos numéricos
+    for (int i = 0; i < 11; i++)
+    {
+        if (!isdigit(cpf[i]))
+            return false;
+    }
+
+    // Converte o array de char para um array de inteiros
+    int digitos[11];
+    for (int i = 0; i < 11; i++)
+    {
+        digitos[i] = cpf[i] - '0';
+    }
+    // Se todas as verificações passaram, o CPF é válido
+    return true;
+}
+
