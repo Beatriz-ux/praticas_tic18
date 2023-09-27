@@ -4,7 +4,7 @@ Este repositório contém soluções para várias listas de exercícios implemen
 
 ## Lista de Conteúdo
 
-- [Prática 03](/tree/main/pratica013/src): Esta pasta contém soluções para exercícios relacionados ao gerenciamento de passagens de ônibus, reajuste de salário e um programa para consulta de produtos.
+- [Prática 03]([/tree/main/pratica013/src](https://github.com/Beatriz-ux/praticas_tic18/tree/main/pratica013/src)): Esta pasta contém soluções para exercícios relacionados ao gerenciamento de passagens de ônibus, reajuste de salário e um programa para consulta de produtos.
 
 ## Prática 03
 
